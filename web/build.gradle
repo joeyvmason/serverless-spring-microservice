@@ -1,0 +1,12 @@
+dependencies {
+    compile project(':core')
+
+    compile(
+        libs.spring.webmvc,
+        libs.aws.lambda,
+        libs.awsServerlessJavaContainer.core,
+        libs.awsServerlessJavaContainer.spring,
+        libs.javax.servletApi,
+        libs.javax.wsRsApi
+    )
+}

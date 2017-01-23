@@ -1,0 +1,40 @@
+allprojects {
+    task wrapper(type: Wrapper) {
+        gradleVersion = '2.1'
+    }
+
+    group = 'com.joeyvmason'
+    version = '1.0'
+
+    apply plugin: 'java'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    apply from: "$rootDir/libs.gradle"
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    configurations.all {
+        all*.exclude group: "commons-logging", module: "commons-logging"
+    }
+
+    dependencies{
+        compile libs.spring.support
+        compile libs.logging.logback
+        compile libs.logging.jcloverslf4j
+        compile libs.apacheCommons.lang3
+
+        testCompile libs.test.festAssert
+        testCompile libs.test.testng
+        testCompile libs.test.spring
+    }
+
+    test {
+        useTestNG()
+//        testLogging.showStandardStreams=true
+    }
+}
