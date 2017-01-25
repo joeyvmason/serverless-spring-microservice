@@ -5,7 +5,9 @@ ext.versions = [
 
 ext.libs = [
         aws:    [
-            lambda: 'com.amazonaws:aws-lambda-java-core:1.1.0'
+            lambda: 'com.amazonaws:aws-lambda-java-core:1.1.0',
+            lambdaEvents: 'com.amazonaws:aws-lambda-java-events:1.3.0',
+            kinesisClient: 'com.amazonaws:amazon-kinesis-client:1.7.3',
         ],
         awsServerlessJavaContainer: [
                 core: "com.amazonaws.serverless:aws-serverless-java-container-core:${versions.awsServerlessJavaContainer}",
