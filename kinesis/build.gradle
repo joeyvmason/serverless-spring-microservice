@@ -7,4 +7,9 @@ dependencies {
             libs.aws.lambda,
             libs.aws.lambdaEvents
     )
+
+    testCompile(
+            libs.awsServerlessJavaContainer.core,
+            libs.awsServerlessJavaContainer.spring
+    )
 }

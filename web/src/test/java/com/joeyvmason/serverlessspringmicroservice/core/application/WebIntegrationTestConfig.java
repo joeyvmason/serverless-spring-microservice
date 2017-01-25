@@ -5,6 +5,8 @@ import com.amazonaws.serverless.proxy.internal.model.AwsProxyRequest;
 import com.amazonaws.serverless.proxy.internal.model.AwsProxyResponse;
 import com.amazonaws.serverless.proxy.internal.testutils.MockLambdaContext;
 import com.amazonaws.serverless.proxy.spring.SpringLambdaContainerHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.joeyvmason.serverlessspringmicroservice.web.application.WebConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +14,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 
 @Configuration
-@Import(CoreIntegrationTestConfig.class)
+@Import({WebConfig.class, CoreIntegrationTestConfig.class})
 public class WebIntegrationTestConfig {
 
     @Autowired

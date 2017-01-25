@@ -20,7 +20,7 @@ public class WebLambdaHandler implements RequestHandler<AwsProxyRequest, AwsProx
         if (!initialized) {
 
             try {
-                handler = SpringLambdaContainerHandler.getAwsProxyHandler(MvcConfig.class);
+                handler = SpringLambdaContainerHandler.getAwsProxyHandler(WebConfig.class);
                 initialized = true;
             } catch (ContainerInitializationException e) {
                 LOG.warn("Unable to create handler", e);

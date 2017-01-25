@@ -21,7 +21,7 @@ import java.util.List;
 @Configuration
 @Import(CoreConfig.class)
 @ComponentScan(basePackages = {"com.joeyvmason.serverlessspringmicroservice.web"})
-public class MvcConfig extends WebMvcConfigurerAdapter {
+public class WebConfig extends WebMvcConfigurerAdapter {
     private static final long MAX_UPLOAD_SIZE = 125_829_120L;
 
     @Bean

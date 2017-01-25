@@ -1,0 +1,52 @@
+package com.joeyvmason.serverlessspringmicroservice.kinesis.domain;
+
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.amazonaws.services.lambda.runtime.events.KinesisEvent;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.joeyvmason.serverlessspringmicroservice.core.domain.articles.Article;
+import com.joeyvmason.serverlessspringmicroservice.core.domain.articles.ArticleRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+
+@Component
+public class KinesisEventProcessor implements RequestHandler<KinesisEvent, Void> {
+    private static final Logger LOG = LoggerFactory.getLogger(KinesisEventProcessor.class);
+
+    private final ObjectMapper objectMapper;
+    private final ArticleRepository articleRepository;
+
+    @Autowired
+    public KinesisEventProcessor(ObjectMapper objectMapper, ArticleRepository articleRepository) {
+        this.objectMapper = objectMapper;
+        this.articleRepository = articleRepository;
+    }
+
+    @Override
+    public Void handleRequest(KinesisEvent input, Context context) {
+        input.getRecords().forEach(record -> {
+            try {
+                Article article = objectMapper.readValue(record.getKinesis().getData().array(), Article.class);
+                LOG.info("Received request to update Article({})", article);
+
+                Article articleFromDB = articleRepository.findOne(article.getId());
+
+                LOG.info("Updating Article({})", articleFromDB);
+                articleFromDB.setTitle(article.getTitle());
+                articleFromDB.setBody(article.getBody());
+                articleRepository.save(article);
+            } catch (RuntimeException e) {
+                LOG.warn("Unable to process event", e);
+                throw e;
+            } catch (Exception e) {
+                LOG.warn("Unable to process event", e);
+                throw new RuntimeException(e);
+            }
+        });
+
+        return null;
+    }
+}
