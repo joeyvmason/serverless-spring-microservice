@@ -3,7 +3,7 @@ dependencies {
     testCompile project(':core').sourceSets.test.output
 
     compile(
-            libs.aws.kinesisClient,
+            libs.aws.sns,
             libs.aws.lambda,
             libs.aws.lambdaEvents
     )

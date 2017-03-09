@@ -2,7 +2,7 @@ package com.joeyvmason.serverlessspringmicroservice.sns.domain;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.amazonaws.services.lambda.runtime.events.KinesisEvent;
+import com.amazonaws.services.lambda.runtime.events.SNSEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.joeyvmason.serverlessspringmicroservice.core.domain.articles.Article;
 import com.joeyvmason.serverlessspringmicroservice.core.domain.articles.ArticleRepository;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class SnsEventProcessor implements RequestHandler<KinesisEvent, Void> {
+public class SnsEventProcessor implements RequestHandler<SNSEvent, Void> {
     private static final Logger LOG = LoggerFactory.getLogger(SnsEventProcessor.class);
 
     private final ObjectMapper objectMapper;
@@ -26,10 +26,11 @@ public class SnsEventProcessor implements RequestHandler<KinesisEvent, Void> {
     }
 
     @Override
-    public Void handleRequest(KinesisEvent input, Context context) {
+    public Void handleRequest(SNSEvent input, Context context) {
         input.getRecords().forEach(record -> {
             try {
-                Article article = objectMapper.readValue(record.getKinesis().getData().array(), Article.class);
+                SNSEvent.SNSRecord snsRecord = input.getRecords().get(0);
+                Article article = objectMapper.readValue(snsRecord.getSNS().getMessage(), Article.class);
                 LOG.info("Received request to update Article({})", article);
 
                 Article articleFromDB = articleRepository.findOne(article.getId());

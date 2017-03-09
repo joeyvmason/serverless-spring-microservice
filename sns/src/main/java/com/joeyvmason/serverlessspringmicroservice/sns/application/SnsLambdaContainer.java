@@ -2,7 +2,7 @@ package com.joeyvmason.serverlessspringmicroservice.sns.application;
 
 
 import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.events.KinesisEvent;
+import com.amazonaws.services.lambda.runtime.events.SNSEvent;
 import com.joeyvmason.serverlessspringmicroservice.sns.domain.SnsEventProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -21,9 +21,9 @@ public class SnsLambdaContainer {
         this.applicationContext = applicationContext;
     }
 
-    public void handleRequest(KinesisEvent kinesisEvent, Context context) {
-        SnsEventProcessor kinesisEventProcessor = applicationContext.getBean(SnsEventProcessor.class);
-        kinesisEventProcessor.handleRequest(kinesisEvent, context);
+    public void handleRequest(SNSEvent snsEvent, Context context) {
+        SnsEventProcessor snsEventProcessor = applicationContext.getBean(SnsEventProcessor.class);
+        snsEventProcessor.handleRequest(snsEvent, context);
     }
 
 }
