@@ -30,7 +30,7 @@ public class SnsEventHandlerTest extends BaseSnsIntegrationTest {
     private SnsLambdaHandler snsLambdaHandler;
 
     @Test
-    public void foo() throws Exception {
+    public void shouldHandleEvent() throws Exception {
         //given
         Article article = articleRepository.save(ArticleTestBuilder.valid().build());
         article.setTitle(RandomStringUtils.randomAlphanumeric(10));
@@ -43,7 +43,6 @@ public class SnsEventHandlerTest extends BaseSnsIntegrationTest {
         sns.setMessage(objectMapper.writeValueAsString(article));
         snsRecord.setSns(sns);
         snsEvent.setRecords(Lists.newArrayList(snsRecord));
-
 
         //when
         snsLambdaHandler.handleRequest(snsEvent, mockLambdaContext);

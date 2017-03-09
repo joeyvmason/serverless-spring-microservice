@@ -1,32 +1,29 @@
 package com.joeyvmason.serverlessspringmicroservice.kinesis.domain;
 
+
 import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.KinesisEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.joeyvmason.serverlessspringmicroservice.core.domain.articles.Article;
 import com.joeyvmason.serverlessspringmicroservice.core.domain.articles.ArticleRepository;
+import com.joeyvmason.serverlessspringmicroservice.kinesis.application.AbstractLambdaContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
 @Component
-public class KinesisEventProcessor implements RequestHandler<KinesisEvent, Void> {
-    private static final Logger LOG = LoggerFactory.getLogger(KinesisEventProcessor.class);
-
-    private final ObjectMapper objectMapper;
-    private final ArticleRepository articleRepository;
+public class KinesisLambdaContainer implements AbstractLambdaContainer<KinesisEvent, Void> {
+    private static final Logger LOG = LoggerFactory.getLogger(KinesisLambdaContainer.class);
 
     @Autowired
-    public KinesisEventProcessor(ObjectMapper objectMapper, ArticleRepository articleRepository) {
-        this.objectMapper = objectMapper;
-        this.articleRepository = articleRepository;
-    }
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private ArticleRepository articleRepository;
 
     @Override
-    public Void handleRequest(KinesisEvent input, Context context) {
+    public Void handleRequest(KinesisEvent input, Context context) throws Exception {
         input.getRecords().forEach(record -> {
             try {
                 Article article = objectMapper.readValue(record.getKinesis().getData().array(), Article.class);

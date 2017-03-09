@@ -3,7 +3,6 @@ package com.joeyvmason.serverlessspringmicroservice.kinesis.domain;
 import com.amazonaws.serverless.proxy.internal.testutils.MockLambdaContext;
 import com.joeyvmason.serverlessspringmicroservice.core.application.CoreIntegrationTestConfig;
 import com.joeyvmason.serverlessspringmicroservice.kinesis.application.KinesisConfig;
-import com.joeyvmason.serverlessspringmicroservice.kinesis.application.KinesisLambdaContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +22,9 @@ public class KinesisIntegrationTestConfig {
     }
 
     @Bean
-    public KinesisLambdaContainer kinesisLambdaContainer() {
-        return new KinesisLambdaContainer(applicationContext);
+    public KinesisLambdaHandler kinesisLambdaHandler() {
+        KinesisLambdaHandler handler = new KinesisLambdaHandler();
+        handler.setApplicationContext(applicationContext);
+        return handler;
     }
 }

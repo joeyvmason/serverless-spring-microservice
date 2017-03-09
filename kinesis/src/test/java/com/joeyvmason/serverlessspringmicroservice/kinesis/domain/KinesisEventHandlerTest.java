@@ -1,5 +1,6 @@
 package com.joeyvmason.serverlessspringmicroservice.kinesis.domain;
 
+import com.amazonaws.serverless.proxy.internal.testutils.MockLambdaContext;
 import com.amazonaws.services.lambda.runtime.events.KinesisEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
@@ -22,6 +23,12 @@ public class KinesisEventHandlerTest extends BaseKinesisIntegrationTest {
     @Autowired
     private ArticleRepository articleRepository;
 
+    @Autowired
+    private KinesisLambdaHandler kinesisLambdaHandler;
+
+    @Autowired
+    private MockLambdaContext mockLambdaContext;
+
     @Test
     public void shouldHandleEvent() throws Exception {
         //given
@@ -39,7 +46,7 @@ public class KinesisEventHandlerTest extends BaseKinesisIntegrationTest {
         kinesisEvent.setRecords(Lists.newArrayList(record));
 
         //when
-        handleRequest(kinesisEvent);
+        kinesisLambdaHandler.handleRequest(kinesisEvent, mockLambdaContext);
 
         //then
         Article articleFromDB = articleRepository.findOne(article.getId());
