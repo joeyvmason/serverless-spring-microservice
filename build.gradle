@@ -1,12 +1,12 @@
-allprojects {
-    buildscript {
-        repositories { jcenter() }
-        dependencies {
-            //Gradle shadow plugin
-            classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
-        }
+buildscript {
+    repositories { jcenter() }
+    dependencies {
+        //Gradle shadow plugin
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
     }
+}
 
+subprojects {
     task wrapper(type: Wrapper) {
         gradleVersion = '2.1'
     }
