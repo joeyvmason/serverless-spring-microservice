@@ -1,32 +1,29 @@
 package com.joeyvmason.serverlessspringmicroservice.sns.domain;
 
+
 import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.SNSEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.joeyvmason.serverlessspringmicroservice.core.domain.articles.Article;
 import com.joeyvmason.serverlessspringmicroservice.core.domain.articles.ArticleRepository;
+import com.joeyvmason.serverlessspringmicroservice.sns.application.AbstractLambdaContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
 @Component
-public class SnsEventProcessor implements RequestHandler<SNSEvent, Void> {
-    private static final Logger LOG = LoggerFactory.getLogger(SnsEventProcessor.class);
-
-    private final ObjectMapper objectMapper;
-    private final ArticleRepository articleRepository;
+public class SnsLambdaContainer implements AbstractLambdaContainer<SNSEvent, Void> {
+    private static final Logger LOG = LoggerFactory.getLogger(SnsLambdaContainer.class);
 
     @Autowired
-    public SnsEventProcessor(ObjectMapper objectMapper, ArticleRepository articleRepository) {
-        this.objectMapper = objectMapper;
-        this.articleRepository = articleRepository;
-    }
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private ArticleRepository articleRepository;
 
     @Override
-    public Void handleRequest(SNSEvent input, Context context) {
+    public Void handleRequest(SNSEvent input, Context context) throws Exception {
         input.getRecords().forEach(record -> {
             try {
                 SNSEvent.SNSRecord snsRecord = input.getRecords().get(0);

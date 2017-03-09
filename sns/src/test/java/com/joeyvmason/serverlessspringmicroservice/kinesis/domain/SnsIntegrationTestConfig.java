@@ -3,7 +3,7 @@ package com.joeyvmason.serverlessspringmicroservice.kinesis.domain;
 import com.amazonaws.serverless.proxy.internal.testutils.MockLambdaContext;
 import com.joeyvmason.serverlessspringmicroservice.core.application.CoreIntegrationTestConfig;
 import com.joeyvmason.serverlessspringmicroservice.sns.application.SnsConfig;
-import com.joeyvmason.serverlessspringmicroservice.sns.application.SnsLambdaContainer;
+import com.joeyvmason.serverlessspringmicroservice.sns.domain.SnsLambdaHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +23,9 @@ public class SnsIntegrationTestConfig {
     }
 
     @Bean
-    public SnsLambdaContainer kinesisLambdaContainer() {
-        return new SnsLambdaContainer(applicationContext);
+    public SnsLambdaHandler snsLambdaHandler() {
+        SnsLambdaHandler handler = new SnsLambdaHandler();
+        handler.setApplicationContext(applicationContext);
+        return handler;
     }
 }
